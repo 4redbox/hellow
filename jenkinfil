@@ -2,25 +2,27 @@ pipeline {
     agent any
 
     stages {
-        stage('Compile') {
+        stage('Checkout') {
             steps {
-                echo 'Hello World Compiled'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'redbox', url: 'https://github.com/4redbox/hellow.git']])
+                bat 'dir'
+                echo 'Checkout Complete'
+
             }
         }
-        stage('Test') {
+        stage('Compile') {
             steps {
-                echo 'Hello World Tested'
-            }     
+                bat 'javac hellow.java'
+                echo 'Compile Complete'
+
+            }
         }
-        stage('Deploy') {
+        stage('Testing') {
             steps {
-                echo 'Hello World Deployed'
-            }            
-        }
-                stage('Release') {
-            steps {
-                echo 'Hello World Released'
-            }            
+                bat 'java hellow.java'
+                echo 'Testing Complete'
+
+            }
         }
     }
 }
